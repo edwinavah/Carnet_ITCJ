@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 
 # Create your views here.
 def login(request):
@@ -6,3 +6,6 @@ def login(request):
 
 def dashboard(request):
     return render(request, "dashboard.html")
+
+def actividades(request):
+    return render(request, "actividades.html")
