@@ -1,0 +1,89 @@
+{% extends "base.html" %} 
+{% block title %} Actividades | Carnet TecNM {% endblock %} 
+
+{% block content %} 
+{% load crispy_forms_tags %} 
+{% block js %}
+<script type="text/javascript">
+    function eliminarActividad(id) {
+        console.log(id);
+        Swal.fire({
+                "title": "¿Estas seguro de eliminar esta actividad?",
+                "text": false,
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, cancelar",
+                "confirmButtonText": "Si, confirmar",
+                "reverseButtons": true,
+                "confirmButtonColor": "#dc3545"
+            })
+            .then(function(result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar-actividad/" + id + "/"
+                }
+            })
+    }
+</script>
+{% endblock %}
+
+<h3 class="card-title mt-4">Actividades</h3>
+<div class="row ">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <a href="#" class="btn btn-primary" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i> </a>
+                <div class="table-responsive-xl">
+                    <table class="table table-sm table-hover table-condensed table-bordered table-striped mt-2">
+                        <tr style="background-color: #052947; color: #ffffff;">
+                            <td class="text-center align-middle" style="width: 350px; min-width: 350px;">Codigo QR</td>
+                            <td class="text-center align-middle">Nombre</td>
+                            <td class="text-center align-middle">Horas</td>
+                            <td class="text-center align-middle">Fecha</td>
+                            <td class="text-center align-middle">Docente</td>
+                            <td class="text-center align-middle" style="width: 130px; min-width: 130px;">Acciones</td>
+                        </tr>
+
+                        {% for a in actividad %}
+                        <tr>
+                            <td class="align-middle">{{ a.codigo_qr }}</td>
+                            <td class="align-middle">{{ a.nombre }}</td>
+                            <td class="align-middle">{{ a.horas }}</td>
+                            <td class="align-middle">{{ a.fecha }}</td>
+                            <td class="align-middle">{{ a.impartidor }}</td>
+                            <td class="text-center align-middle">
+                                <a href="{% url 'modificar-actividad' a.codigo_qr %}" class="btn btn-warning btn-sm"><i class="far fa-edit"></i></a>
+                                <a href="#" onclick="eliminarActividad('{{ a.codigo_qr }}')" class="btn btn-danger btn-sm ml-1"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {% include "paginator.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="agregarModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nueva actividad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %} {{ form | crispy }}
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn btn-outline-dark mr-1" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary ml-1" style="background: #052947; border-color: #0f4471">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

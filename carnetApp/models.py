@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.core.validators import MaxValueValidator
 from django.db import models
+import uuid
 
 # Create your models here.
 class Alumno(models.Model):
@@ -62,7 +63,7 @@ class Actividad(models.Model):
         ('actividades-extraescolares', 'Actividades Extraescolares (Formacion Integral)'),
         ('centro-informacion', 'Centro de Informacion (Biblioteca)'))
 
-    codigo_qr = models.CharField(primary_key=True, max_length=500, null=False, verbose_name="Codigo QR")
+    codigo_qr = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=250, null=False)
     horas = models.IntegerField(null=False)
     fecha = models.DateTimeField(auto_now_add=True, null=False)

@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap');
+:root {
+    --primary-font: 'Raleway', 'Open Sans', 'sans-serif';
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+html {
+    font-size: 16px;
+    font-family: var(--primary-font);
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #f6f6f6;
+}
+
+/* --- BARRA LATERAL --- */
+.barra-lateral {
+    /* background: #262a34; */
+    background: #052947;
+    color: #ffffff;
+    min-width: 260px;
+    min-height: 100vh;
+    height: 100%;
+    padding: 0;
+}
+
+.barra-lateral a {
+    color: #ffffff;
+}
+
+/* --- LOGO EN MENU --- */
+.barra-lateral .logo {
+    /* background: #007bff; */
+    background: #0f4471;
+    padding: 10px;
+}
+
+.barra-lateral .logo img {
+    width: 200px;
+    height: 75px;
+}
+
+/* --- MENU DE OPCIONES --- */
+.barra-lateral .menu a {
+    display: block;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500px;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.barra-lateral .menu a:hover {
+    background: #3282b8;
+    text-decoration: none;
+}
+
+/* --- --- MEDIAQUERIES --- --- */
+@media screen and (max-width: 1500px) {
+    .barra-lateral {
+        min-width: auto;
+    }
+    .barra-lateral .logo {
+        display: none;
+    }
+    .barra-lateral .menu a span {
+        display: none;
+    }
+    .barra-lateral .menu a i {
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .barra-lateral {
+        width: 1100px;
+        min-height: auto;
+        display: flex;
+        justify-content: center;
+    }
+    .barra-lateral .menu a {
+        display: inline-block;
+        border-bottom: none;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .barra-lateral {
+        width: 580px;
+        min-height: auto;
+        display: flex;
+        justify-content: center;
+    }
+    .barra-lateral .menu a {
+        display: inline-block;
+        border-bottom: none;
+    }
+}

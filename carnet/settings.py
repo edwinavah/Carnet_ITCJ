@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     '*',
 ]
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Application definition
 
@@ -40,7 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'carnetApp',
+    'crispy_forms',
+    'rest_framework',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,12 +83,17 @@ WSGI_APPLICATION = 'carnet.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'carnet',
+        # 'USER': 'doadmin',
+        # 'PASSWORD': 'qy4clnc932uhtjw6',
+        # 'HOST': 'carnet-mysql-do-user-7808488-0.b.db.ondigitalocean.com',
+        # 'PORT': '25060',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'carnet',
         'USER': 'iProxy',
         'PASSWORD': 'GV*DD*4AeCQy7-F',
         'HOST': '127.0.0.1',
-        # 'HOST': 'mysql',
         'PORT': '3306',
     }
 }
