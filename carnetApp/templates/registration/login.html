@@ -1,0 +1,58 @@
+<html lang="en">
+
+<head>
+    {% load static %}
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/all.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/alertify.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/themes/default.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/fontawesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/swiper.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/login.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/icons/favicon.png' %}" type="image/png" />
+
+    <script src="{% static 'libraries/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'libraries/js/all.js' %}"></script>
+    <script src="{% static 'libraries/js/bootstrap.js' %}"></script>
+    <script src="{% static 'libraries/js/alertify.min.js' %}"></script>
+    <script src="{% static 'libraries/js/fontawesome.js' %}"></script>
+    <script src="{% static 'libraries/js/swiper.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title> Inicio de Sesión | Carnet TecNM</title>
+</head>
+
+<body>
+    <div class="d-flex justify-content-start" style="height: 100%">
+        <div class="d-flex justify-content-center align-items-center flex-column" style="background: #FFFFFF; width: auto; height: 100%">
+            <h1 style="color: #052947; font-weight: 600; text-align: center;">Inicio de Sesión</h1>
+            <p style="color: #052947; font-weight: 500; text-align: center;">Carnet Digital</p>
+            <form class="p-4" method="POST" style="width: 100%">
+                <div class="img-login">
+                    <div class="d-flex justify-content-center">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 d-flex justify-content-center">
+                               <img src="{%  static 'images/tecnm.png' %}" alt="" style="width: auto; height: 110px;">
+                            </div>
+                            <div class="col-12 col-lg-6 d-flex justify-content-center">
+                               <img src="{%  static 'images/itcj.png' %}" alt="" style="width: auto; height: 110px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                </div>
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <button type="submit" class="btn btn-primary ml-3" style="background: #052947; border-color: #0f4471">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

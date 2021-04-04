@@ -8,17 +8,17 @@ from rest_framework import viewsets
 from .serializers import ActividadSerializer, AsistenciaSerializer, AlumnoSerializer, ConferencistaSerializer
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 class ActividadViewset(viewsets.ModelViewSet):
     queryset = Actividad.objects.all()
     serializer_class = ActividadSerializer
 
-def login(request):
-    return render(request, "login.html")
-
+@login_required
 def dashboard(request):
     return render(request, "dashboard.html")
 
+@login_required
 def actividades(request):
     actividad = Actividad.objects.all()
     page = request.GET.get('page', 1)
@@ -40,11 +40,13 @@ def actividades(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, "Se agrego correctamente")
+            return redirect(to="actividades")
         else:
             data["form"] = formulario
 
     return render(request, "actividades/actividades.html", data)
 
+@login_required
 def modificar_actividad(request, id):
     actividad = get_object_or_404(Actividad, codigo_qr=id)
 
@@ -62,6 +64,7 @@ def modificar_actividad(request, id):
 
     return render(request, "actividades/modificar-actividad.html", data)
 
+@login_required
 def eliminar_actividad(request, id):
     actividad = get_object_or_404(Actividad, codigo_qr=id)
     actividad.delete()

@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap');
+:root {
+    --primary-font: 'Raleway', 'Open Sans', 'sans-serif';
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+html {
+    font-size: 16px;
+    font-family: var(--primary-font);
+    scroll-behavior: smooth;
+}
+
+body{
+    /*background: #0f4471;*/
+    background: url(../../images/background-login.jpg) no-repeat center center fixed;
+    /*background: url(../../images/login_backgroud.png) no-repeat center center fixed;*/
+    background-size: cover;
+    font-family: var(--primary-font);
+}
+
+@media screen and (max-width: 1024px) {
+    .img-login {
+        display: none;
+    }
+}
