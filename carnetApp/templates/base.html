@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="col text-center mt-2">
                                 {% if user.is_authenticated %}
-                                    Hola, {{ user.username }}
+                                    Hola, {{ user.first_name }}
                                 {%  endif %}
                             </div>
 
@@ -53,7 +53,7 @@
                             </div>
                         </a>
 
-                        <a href="#">
+                        <a href="{% url 'alumnos' %}">
                             <div class="row">
                                 <div class="col-3">
                                     <i class="fas fa-user-graduate"></i>
@@ -62,12 +62,12 @@
                             </div>
                         </a>
 
-                        <a href="#">
+                        <a href="{% url 'conferencistas' %}">
                             <div class="row">
                                 <div class="col-3">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                 </div>
-                                <span> Docentes</span>
+                                <span> Conferencistas</span>
                             </div>
                         </a>
 

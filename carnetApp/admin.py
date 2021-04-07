@@ -14,7 +14,7 @@ class ConferencistaAdmin(admin.ModelAdmin):
     list_display=("correo", "nombre", "apellidos", "departamento")
 
 class ActividadAdmin(admin.ModelAdmin):
-    list_display=("codigo_qr", "nombre", "horas", "fecha", "impartidor")
+    list_display=("codigo_qr", "nombre", "horas", "fecha", "impartidor", "img")
 
 class AsistenciaAdmin(admin.ModelAdmin):
     list_display=("alumno", "actividad", "fecha")
