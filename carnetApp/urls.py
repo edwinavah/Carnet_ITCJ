@@ -2,12 +2,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from .views import dashboard, ActividadViewset, actividades, modificar_actividad, eliminar_actividad, ConferencistasViewset, conferencistas, modificar_conferencista, eliminar_conferencista, AlumnoViewset, alumnos, modificar_alumno, eliminar_alumno
+from .views import dashboard, ActividadViewset, actividades, modificar_actividad, eliminar_actividad, ConferencistasViewset, conferencistas, modificar_conferencista, eliminar_conferencista, AlumnoViewset, alumnos, modificar_alumno, eliminar_alumno, AsistenciaViewset
 
 router = routers.DefaultRouter()
 router.register('actividades', ActividadViewset)
 router.register('conferencistas', ConferencistasViewset)
 router.register('alumnos', AlumnoViewset)
+router.register('asistencias', AsistenciaViewset)
 
 urlpatterns = [
     path('', dashboard, name="dashboard"),

@@ -40,42 +40,58 @@
 </script>
 {% endblock %}
 
-<h3 class="mt-4">Actividades</h3>
-<div class="row">
-    <div class="col-sm-12">
+<div class="row mt-4">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <a href="#" class="btn btn-primary" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i> </a>
-                <div class="table-responsive-xl">
-                    <table class="table table-sm table-hover table-condensed table-bordered table-striped mt-2">
-                        <tr style="background-color: #052947; color: #ffffff;">
-{#                            <td class="text-center align-middle" style="width: 350px; min-width: 350px;">Codigo QR</td>#}
-                            <td class="text-center align-middle">Nombre</td>
-                            <td class="text-center align-middle">Horas</td>
-                            <td class="text-center align-middle">Fecha</td>
-                            <td class="text-center align-middle">Conferencista</td>
-                            <td class="text-center align-middle">Codigo QR</td>
-                            <td class="text-center align-middle" style="width: 130px; min-width: 130px;">Acciones</td>
-                        </tr>
-
-                        {% for a in actividad %}
-                        <tr>
-{#                            <td class="align-middle">{{ a.codigo_qr }}</td>#}
-                            <td class="align-middle">{{ a.nombre }}</td>
-                            <td class="align-middle">{{ a.horas }}</td>
-                            <td class="align-middle">{{ a.fecha }}</td>
-                            <td class="align-middle">{{ a.impartidor }}</td>
-                            <td class="text-center align-middle"><a href="#" onclick="mostrarQR('../../../media/qr_codes/{{a.codigo_qr}}.png', '{{ a.nombre }}', '{{ a.impartidor }}')" class="btn btn-info btn-sm">Mostrar QR <i class="fas fa-qrcode"></i></a></td>
-                            <td class="text-center align-middle">
-                                <a href="{% url 'modificar-actividad' a.codigo_qr %}" class="btn btn-warning btn-sm"><i class="far fa-edit"></i></a>
-                                <a href="#" onclick="eliminarActividad('{{ a.codigo_qr }}')" class="btn btn-danger btn-sm ml-1"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                <div class="row">
+                    <div class="col-12 col-lg-2">
+                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <form action="" method="get" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Buscar actividad" name="buscar" value="{{ request.GET.buscar }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" style="background: #052947; border-color: #0f4471" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <hr>
-                {% include "actividades/paginator.html" %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive-xl">
+                            <table class="table table-sm table-hover table-condensed table-bordered table-striped">
+                                <tr style="background-color: #052947; color: #ffffff;">
+                                    <td class="text-center align-middle">Nombre</td>
+                                    <td class="text-center align-middle">Horas</td>
+                                    <td class="text-center align-middle">Fecha</td>
+                                    <td class="text-center align-middle">Conferencista (Correo)</td>
+                                    <td class="text-center align-middle" style="width: 130px; min-width: 130px;">Codigo QR</td>
+                                    <td class="text-center align-middle" style="width: 160px; min-width: 160px;">Asistencia</td>
+                                    <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
+                                </tr>
+
+                                {% for a in actividad %}
+                                <tr>
+                                    <td class="align-middle">{{ a.nombre }}</td>
+                                    <td class="align-middle">{{ a.horas }}</td>
+                                    <td class="align-middle">{{ a.fecha }}</td>
+                                    <td class="align-middle">{{ a.impartidor }}</td>
+                                    <td class="text-center align-middle"><a href="#" onclick="mostrarQR('../../../media/qr_codes/{{a.codigo_qr}}.png', '{{ a.nombre }}', '{{ a.impartidor }}')" class="btn btn-info btn-sm">Mostrar QR <i class="fas fa-qrcode"></i></a></td>
+                                    <td class="text-center align-middle"><a href="#" class="btn btn-dark btn-sm">Mostrar Asistencia</a></td>
+                                    <td class="text-center align-middle">
+                                        <a href="{% url 'modificar-actividad' a.codigo_qr %}" class="btn btn-warning btn-sm">Modificar</a>
+                                        <a href="#" onclick="eliminarActividad('{{ a.codigo_qr }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {% include "actividades/paginator.html" %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

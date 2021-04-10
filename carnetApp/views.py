@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from pathlib import Path
 import os
 from .models import Actividad, Asistencia, Alumno, Conferencista
@@ -22,6 +23,10 @@ class AlumnoViewset(viewsets.ModelViewSet):
     queryset = Alumno.objects.all()
     serializer_class = AlumnoSerializer
 
+class AsistenciaViewset(viewsets.ModelViewSet):
+    queryset = Asistencia.objects.all()
+    serializer_class = AsistenciaSerializer
+
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
@@ -29,21 +34,28 @@ def dashboard(request):
 # Actividades
 @login_required
 def actividades(request):
+    queryset = request.GET.get("buscar")
     actividad = Actividad.objects.all()
-    page = request.GET.get('page', 1)
+    if queryset:
+        actividad = Actividad.objects.filter(
+            Q(nombre__icontains=queryset) |
+            Q(impartidor__correo__icontains=queryset)
+        ).distinct()
 
+    page = request.GET.get('page', 1)
     try:
         paginator = Paginator(actividad, 15)
         actividad = paginator.page(page)
     except:
         raise Http404
-    
+
     data = {
         'actividad':actividad,
         'form':ActividadForm(),
         'paginator':paginator
     }
 
+    # Agregar nueva actividad
     if request.method == 'POST':
         formulario = ActividadForm(data=request.POST)
         if formulario.is_valid():
@@ -88,7 +100,15 @@ def eliminar_actividad(request, id):
 # Conferencistas
 @login_required
 def conferencistas(request):
+    queryset = request.GET.get("buscar")
     conferencista = Conferencista.objects.all()
+    if queryset:
+        conferencista = Conferencista.objects.filter(
+            Q(nombre__icontains=queryset) |
+            Q(apellidos__icontains=queryset) |
+            Q(correo__icontains=queryset)
+        ).distinct()
+
     page = request.GET.get('page', 1)
 
     try:
@@ -142,7 +162,13 @@ def eliminar_conferencista(request, id):
 # Alumnos
 @login_required
 def alumnos(request):
+    queryset = request.GET.get("buscar")
     alumno = Alumno.objects.all()
+    if queryset:
+        alumno = Alumno.objects.filter(
+            Q(no_control__icontains=queryset)
+        ).distinct()
+
     page = request.GET.get('page', 1)
 
     try:

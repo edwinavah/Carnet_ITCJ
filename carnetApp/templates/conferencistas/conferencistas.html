@@ -26,38 +26,54 @@
 </script>
 {% endblock %}
 
-<h3 class="mt-4">Conferencistas</h3>
-<div class="row">
-    <div class="col-sm-12">
+<div class="row mt-4">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <a href="#" class="btn btn-primary" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i> </a>
-                <div class="table-responsive-xl">
-                    <table class="table table-sm table-hover table-condensed table-bordered table-striped mt-2">
-                        <tr style="background-color: #052947; color: #ffffff;">
-                            <td class="text-center align-middle">Nombre</td>
-                            <td class="text-center align-middle">Apellido</td>
-                            <td class="text-center align-middle">Correo</td>
-                            <td class="text-center align-middle">Departamento</td>
-                            <td class="text-center align-middle" style="width: 130px; min-width: 130px;">Acciones</td>
-                        </tr>
-
-                        {% for c in conferencista %}
-                        <tr>
-                            <td class="align-middle">{{ c.nombre }}</td>
-                            <td class="align-middle">{{ c.apellidos }}</td>
-                            <td class="align-middle">{{ c.correo }}</td>
-                            <td class="align-middle">{{ c.departamento }}</td>
-                            <td class="text-center align-middle">
-                                <a href="{% url 'modificar-conferencista' c.id %}" class="btn btn-warning btn-sm"><i class="far fa-edit"></i></a>
-                                <a href="#" onclick="eliminarConferencista('{{ c.id }}')" class="btn btn-danger btn-sm ml-1"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                <div class="row">
+                    <div class="col-12 col-lg-2">
+                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <form action="" method="get" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Buscar conferencista" name="buscar" value="{{ request.GET.buscar }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" style="background: #052947; border-color: #0f4471" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <hr>
-                {% include "conferencistas/paginator.html" %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive-xl">
+                            <table class="table table-sm table-hover table-condensed table-bordered table-striped">
+                                <tr style="background-color: #052947; color: #ffffff;">
+                                    <td class="text-center align-middle">Nombre(s)</td>
+                                    <td class="text-center align-middle">Apellidos</td>
+                                    <td class="text-center align-middle">Correo</td>
+                                    <td class="text-center align-middle">Departamento</td>
+                                    <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
+                                </tr>
+
+                                {% for c in conferencista %}
+                                <tr>
+                                    <td class="align-middle">{{ c.nombre }}</td>
+                                    <td class="align-middle">{{ c.apellidos }}</td>
+                                    <td class="align-middle">{{ c.correo }}</td>
+                                    <td class="align-middle">{{ c.departamento }}</td>
+                                    <td class="text-center align-middle">
+                                        <a href="{% url 'modificar-conferencista' c.id %}" class="btn btn-warning btn-sm">Modificar</a>
+                                        <a href="#" onclick="eliminarConferencista('{{ c.id }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {% include "conferencistas/paginator.html" %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
