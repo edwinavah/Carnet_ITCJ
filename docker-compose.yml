@@ -1,0 +1,66 @@
+version: "3.5"
+
+services:
+  carnet:
+    image: carnet
+    container_name: "carnet"
+    volumes:
+      - ./:/usr/src/app
+      - media:/usr/src/app/media
+    networks:
+      - backend
+    depends_on:
+      - mysql
+      - migrater
+
+  mysql:
+    image: mysql:5.7
+    container_name: "mysql"
+    environment:
+      - "MYSQL_DATABASE=carnet"
+      - "MYSQL_USER=iProxy"
+      - "MYSQL_PASSWORD=GV*DD*4AeCQy7-F"
+      - "MYSQL_ROOT_PASSWORD=GV*DD*4AeCQy7-F"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - backend
+
+  nginx:
+    image: nginx
+    container_name: "nginx"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./carnetApp/static/:/usr/src/app/static/:ro
+      - media:/usr/src/media:ro
+    ports:
+      - "80:80"
+    networks:
+      - bridge
+      - backend
+    depends_on:
+      - carnet
+
+  migrater:
+    image: carnet
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - backend
+    command: ["python","manage.py", "migrate"]
+    depends_on:
+      - mysql
+
+networks:
+  backend:
+    name: "backend_network"
+  bridge:
+    name: "docker_bridge"
+
+volumes:
+  bb3bdd8bba36f17986a4e786b3c79f78632a54fd78b62ef9c38fefc8e13411ba:
+    name: "bb3bdd8bba36f17986a4e786b3c79f78632a54fd78b62ef9c38fefc8e13411ba"
+  mysqldata:
+    name: "mysqldata"
+  media:
+    name: "media_volume"
