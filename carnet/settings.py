@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'carnet',
         'USER': 'iProxy',
         'PASSWORD': 'GV*DD*4AeCQy7-F',
-        'HOST': '127.0.0.1',
+        'HOST': 'mysql',
         'PORT': '3306',
     }
 }
