@@ -68,6 +68,10 @@
                                         <a href="#" onclick="eliminarConferencista('{{ c.id }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td class="text-center align-middle" colspan="5">Sin registros</td>
+                                    </tr>
                                 {% endfor %}
                             </table>
                         </div>

@@ -55,6 +55,7 @@
                                     <td class="text-center align-middle">Apellidos</td>
                                     <td class="text-center align-middle">Carrera</td>
                                     <td class="text-center align-middle">Correo</td>
+                                    <td class="text-center align-middle" style="width: 160px; min-width: 160px;">Asistencia</td>
                                     <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
                                 </tr>
                                 {% for a in alumno %}
@@ -64,11 +65,16 @@
                                     <td class="align-middle">{{ a.apellidos }}</td>
                                     <td class="align-middle">{{ a.carrera }}</td>
                                     <td class="align-middle">{{ a.correo }}</td>
+                                    <td class="text-center align-middle"><a href="{% url 'alumno-asistencias' a.no_control %}" class="btn btn-success btn-sm">Mostrar Asistencias</a></td>
                                     <td class="text-center align-middle">
                                         <a href="{% url 'modificar-alumno' a.no_control %}" class="btn btn-warning btn-sm">Modificar</a>
                                         <a href="#" onclick="eliminarAlumno('{{ a.no_control }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td class="text-center align-middle" colspan="6">Sin registros</td>
+                                    </tr>
                                 {% endfor %}
                             </table>
                         </div>

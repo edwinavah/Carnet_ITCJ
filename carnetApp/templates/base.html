@@ -23,14 +23,13 @@
             <div class="row">
                 <div class="barra-lateral col-12 col-md-auto">
                     <div class="logo text-center">
-                        <img src="{% static 'images/admin.jpg' %}" alt="" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        {% if user.is_authenticated %}
+                        <img src="{% static 'images/edwinavahh.jpg' %}" alt="" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
                         <div class="row">
                             <div class="col text-center mt-2">
-                                {% if user.is_authenticated %}
                                     Hola, {{ user.first_name }}
-                                {%  endif %}
                             </div>
-
+                        {%  endif %}
                         </div>
                     </div>
 

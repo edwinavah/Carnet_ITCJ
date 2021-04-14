@@ -102,3 +102,37 @@ body {
         border-bottom: none;
     }
 }
+
+.button-outline {
+  color: #052947;
+  background-color: transparent;
+  border-color: #052947;
+}
+
+.button-outline:hover {
+  color: #fff;
+  background-color: #052947;
+  border-color: #052947;
+}
+
+.button-outline:focus, .button-outline.focus {
+  box-shadow: 0 0 0 0.2rem rgb(5, 41, 71);
+}
+
+.button-outline.disabled, .button-outline:disabled {
+  color: #fff;
+  background-color: #052947;
+  border-color: #052947;
+}
+
+.button-outline:not(:disabled):not(.disabled):active, .button-outline:not(:disabled):not(.disabled).active,
+.show > .button-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #052947;
+  border-color: #052947;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgb(5, 41, 71);
+}

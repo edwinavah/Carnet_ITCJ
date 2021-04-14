@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from .views import dashboard, ActividadViewset, actividades, modificar_actividad, eliminar_actividad, ConferencistasViewset, conferencistas, modificar_conferencista, eliminar_conferencista, AlumnoViewset, alumnos, modificar_alumno, eliminar_alumno, AsistenciaViewset
+from .views import dashboard, ActividadViewset, actividades, modificar_actividad, eliminar_actividad, ConferencistasViewset, conferencistas, modificar_conferencista, eliminar_conferencista, AlumnoViewset, alumnos, modificar_alumno, eliminar_alumno, AsistenciaViewset, actividad_asistencias, alumno_asistencias
 
 router = routers.DefaultRouter()
 router.register('actividades', ActividadViewset)
@@ -21,6 +21,8 @@ urlpatterns = [
     path('alumnos/', alumnos, name="alumnos"),
     path('modificar-alumno/<id>/', modificar_alumno, name="modificar-alumno"),
     path('eliminar-alumno/<id>/', eliminar_alumno, name="eliminar-alumno"),
+    path('actividad-asistencias/<id>/', actividad_asistencias, name="actividad-asistencias"),
+    path('alumno-asistencias/<id>/', alumno_asistencias, name="alumno-asistencias"),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

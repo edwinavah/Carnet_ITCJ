@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Sum
 from pathlib import Path
 import os
 from .models import Actividad, Asistencia, Alumno, Conferencista
@@ -96,6 +96,59 @@ def eliminar_actividad(request, id):
 
     messages.success(request, "Se eliminó correctamente")
     return redirect(to="actividades")
+
+# Asistencia de las actividades
+@login_required
+def actividad_asistencias(request, id):
+    asistencia = Asistencia.objects.filter(actividad=id)
+
+    queryset = request.GET.get("buscar")
+    if queryset:
+        asistencia = Asistencia.objects.filter(
+            Q(alumno__no_control__icontains=queryset, actividad=id)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(asistencia, 15)
+        asistencia = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'asistencia':asistencia,
+        'paginator':paginator
+    }
+
+    return render(request, "actividad-asistencias/actividad-asistencias.html", data)
+
+
+# Asistencia de alumnos
+@login_required
+def alumno_asistencias(request, id):
+    asistencia = Asistencia.objects.filter(alumno=id)
+    sumhrs = Asistencia.objects.filter(alumno=id).aggregate(Sum('actividad__horas'))
+
+    queryset = request.GET.get("buscar")
+    if queryset:
+        asistencia = Asistencia.objects.filter(
+            Q(actividad__nombre__icontains=queryset, alumno=id)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(asistencia, 15)
+        asistencia = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'asistencia': asistencia,
+        'sumhrs':sumhrs,
+        'paginator':paginator
+    }
+
+    return render(request, "actividad-asistencias/alumno-asistencias.html", data)
 
 # Conferencistas
 @login_required

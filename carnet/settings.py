@@ -87,17 +87,11 @@ WSGI_APPLICATION = 'carnet.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'carnet',
-        # 'USER': 'doadmin',
-        # 'PASSWORD': 'qy4clnc932uhtjw6',
-        # 'HOST': 'carnet-mysql-do-user-7808488-0.b.db.ondigitalocean.com',
-        # 'PORT': '25060',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'carnet',
         'USER': 'iProxy',
         'PASSWORD': 'GV*DD*4AeCQy7-F',
-        'HOST': 'mysql',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -140,5 +134,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/carnetApp/static/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'carnetApp/static/media')
+# AUTH_USER_MODEL = 'carnetApp.Usuario'
