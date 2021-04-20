@@ -2,27 +2,30 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from .views import dashboard, ActividadViewset, actividades, modificar_actividad, eliminar_actividad, ConferencistasViewset, conferencistas, modificar_conferencista, eliminar_conferencista, AlumnoViewset, alumnos, modificar_alumno, eliminar_alumno, AsistenciaViewset, actividad_asistencias, alumno_asistencias
+from .views import dashboard, ActivityViewset, activity, edit_activity, delete_activity, \
+    ExhibitorViewset, exhibitor, edit_exhibitor, delete_exhibitor, \
+    StudentViewset, student, edit_student, delete_student, \
+    AttendViewset, activity_attend, student_attend
 
 router = routers.DefaultRouter()
-router.register('actividades', ActividadViewset)
-router.register('conferencistas', ConferencistasViewset)
-router.register('alumnos', AlumnoViewset)
-router.register('asistencias', AsistenciaViewset)
+router.register('activity', ActivityViewset)
+router.register('exhibitor', ExhibitorViewset)
+router.register('student', StudentViewset)
+router.register('attend', AttendViewset)
 
 urlpatterns = [
     path('', dashboard, name="dashboard"),
-    path('actividades/', actividades, name="actividades"),
-    path('modificar-actividad/<id>/', modificar_actividad, name="modificar-actividad"),
-    path('eliminar-actividad/<id>/', eliminar_actividad, name="eliminar-actividad"),
-    path('conferencistas/', conferencistas, name="conferencistas"),
-    path('modificar-conferencista/<id>/', modificar_conferencista, name="modificar-conferencista"),
-    path('eliminar-conferencista/<id>/', eliminar_conferencista, name="eliminar-actividad"),
-    path('alumnos/', alumnos, name="alumnos"),
-    path('modificar-alumno/<id>/', modificar_alumno, name="modificar-alumno"),
-    path('eliminar-alumno/<id>/', eliminar_alumno, name="eliminar-alumno"),
-    path('actividad-asistencias/<id>/', actividad_asistencias, name="actividad-asistencias"),
-    path('alumno-asistencias/<id>/', alumno_asistencias, name="alumno-asistencias"),
+    path('activity/', activity, name="activity"),
+    path('edit-activity/<id>/', edit_activity, name="edit-activity"),
+    path('delete-activity/<id>/', delete_activity, name="delete-activity"),
+    path('activity-attend/<id>/', activity_attend, name="activity-attend"),
+    path('exhibitor/', exhibitor, name="exhibitor"),
+    path('edit-exhibitor/<id>/', edit_exhibitor, name="edit-exhibitor"),
+    path('delete-exhibitor/<id>/', delete_exhibitor, name="delete-exhibitor"),
+    path('student/', student, name="student"),
+    path('edit-student/<id>/', edit_student, name="edit-student"),
+    path('delete-student/<id>/', delete_student, name="delete-student"),
+    path('student-attend/<id>/', student_attend, name="student-attend"),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -1,25 +1,25 @@
 {% extends "base.html" %} 
-{% block title %} Conferencistas | Carnet TecNM {% endblock %}
+{% block title %} Alumnos | Carnet TecNM {% endblock %}
 
 {% block content %} 
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags %} 
 {% block js %}
 <script type="text/javascript">
-    function eliminarConferencista(id) {
+    function deleteStudent(id) {
         console.log(id);
         Swal.fire({
-                "title": "¿Seguro(a) que desea de eliminar este(a) conferencista?",
-                "text": false,
-                "icon": "question",
-                "showCancelButton": true,
-                "cancelButtonText": "No, cancelar",
-                "confirmButtonText": "Si, confirmar",
-                "reverseButtons": true,
-                "confirmButtonColor": "#dc3545"
-            })
-            .then(function(result) {
+            "title": "¿Seguro(a) que desea de eliminar este(a) alumno(a)?",
+            "text": false,
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, cancelar",
+            "confirmButtonText": "Si, confirmar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3545"
+        })
+            .then(function (result) {
                 if (result.isConfirmed) {
-                    window.location.href = "/eliminar-conferencista/" + id + "/"
+                    window.location.href = "/delete-student/" + id + "/"
                 }
             })
     }
@@ -32,12 +32,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-lg-2">
-                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
+                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#addModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
                     </div>
                     <div class="col-12 col-lg-10">
                         <form action="" method="get" class="mb-3">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Buscar conferencista" name="buscar" value="{{ request.GET.buscar }}">
+                                <input type="text" class="form-control" placeholder="Buscar número de control" name="buscar" value="{{ request.GET.buscar }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" style="background: #052947; border-color: #0f4471" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
@@ -50,32 +50,35 @@
                         <div class="table-responsive-xl">
                             <table class="table table-sm table-hover table-condensed table-bordered table-striped">
                                 <tr style="background-color: #052947; color: #ffffff;">
+                                    <td class="text-center align-middle">No. Control</td>
                                     <td class="text-center align-middle">Nombre(s)</td>
                                     <td class="text-center align-middle">Apellidos</td>
+                                    <td class="text-center align-middle">Carrera</td>
                                     <td class="text-center align-middle">Correo</td>
-                                    <td class="text-center align-middle">Departamento</td>
+                                    <td class="text-center align-middle" style="width: 160px; min-width: 160px;">Asistencia</td>
                                     <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
                                 </tr>
-
-                                {% for c in conferencista %}
+                                {% for s in student %}
                                 <tr>
-                                    <td class="align-middle">{{ c.nombre }}</td>
-                                    <td class="align-middle">{{ c.apellidos }}</td>
-                                    <td class="align-middle">{{ c.correo }}</td>
-                                    <td class="align-middle">{{ c.departamento }}</td>
+                                    <td class="align-middle">{{ s.no_control }}</td>
+                                    <td class="align-middle">{{ s.nombre }}</td>
+                                    <td class="align-middle">{{ s.apellidos }}</td>
+                                    <td class="align-middle">{{ s.carrera }}</td>
+                                    <td class="align-middle">{{ s.correo }}</td>
+                                    <td class="text-center align-middle"><a href="{% url 'student-attend' s.no_control %}" class="btn btn-success btn-sm">Mostrar Asistencias</a></td>
                                     <td class="text-center align-middle">
-                                        <a href="{% url 'modificar-conferencista' c.id %}" class="btn btn-warning btn-sm">Modificar</a>
-                                        <a href="#" onclick="eliminarConferencista('{{ c.id }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
+                                        <a href="{% url 'edit-student' s.no_control %}" class="btn btn-warning btn-sm">Modificar</a>
+                                        <a href="#" onclick="deleteStudent('{{ s.no_control }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
                                     <tr>
-                                        <td class="text-center align-middle" colspan="5">Sin registros</td>
+                                        <td class="text-center align-middle" colspan="6">Sin registros</td>
                                     </tr>
                                 {% endfor %}
                             </table>
                         </div>
-                        {% include "conferencistas/paginator.html" %}
+                        {% include "student/paginator.html" %}
                     </div>
                 </div>
             </div>
@@ -83,11 +86,11 @@
     </div>
 </div>
 
-<div class="modal fade bd-example-modal-lg" id="agregarModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Agregar nuevo(a) conferencista</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo(a) alumno(a)</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -8,24 +8,24 @@ from django.db.models import Q, Sum
 from pathlib import Path
 import os
 from .models import Actividad, Asistencia, Alumno, Conferencista
-from .forms import ActividadForm, ConferencistaForm, AlumnoForm
-from .serializers import ActividadSerializer, AsistenciaSerializer, AlumnoSerializer, ConferencistaSerializer
+from .forms import ActivityForm, ExhibitorForm, StudentForm
+from .serializers import ActivitySerializer, AttendSerializer, StudentSerializer, ExhibitorSerializer
 
-class ActividadViewset(viewsets.ModelViewSet):
+class ActivityViewset(viewsets.ModelViewSet):
     queryset = Actividad.objects.all()
-    serializer_class = ActividadSerializer
+    serializer_class = ActivitySerializer
 
-class ConferencistasViewset(viewsets.ModelViewSet):
+class ExhibitorViewset(viewsets.ModelViewSet):
     queryset = Conferencista.objects.all()
-    serializer_class = ConferencistaSerializer
+    serializer_class = ExhibitorSerializer
 
-class AlumnoViewset(viewsets.ModelViewSet):
+class StudentViewset(viewsets.ModelViewSet):
     queryset = Alumno.objects.all()
-    serializer_class = AlumnoSerializer
+    serializer_class = StudentSerializer
 
-class AsistenciaViewset(viewsets.ModelViewSet):
+class AttendViewset(viewsets.ModelViewSet):
     queryset = Asistencia.objects.all()
-    serializer_class = AsistenciaSerializer
+    serializer_class = AttendSerializer
 
 @login_required
 def dashboard(request):
@@ -33,241 +33,239 @@ def dashboard(request):
 
 # Actividades
 @login_required
-def actividades(request):
+def activity(request):
     queryset = request.GET.get("buscar")
-    actividad = Actividad.objects.all()
+    activity = Actividad.objects.all()
     if queryset:
-        actividad = Actividad.objects.filter(
+        activity = Actividad.objects.filter(
             Q(nombre__icontains=queryset) |
             Q(impartidor__correo__icontains=queryset)
         ).distinct()
 
     page = request.GET.get('page', 1)
     try:
-        paginator = Paginator(actividad, 15)
-        actividad = paginator.page(page)
+        paginator = Paginator(activity, 15)
+        activity = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'actividad':actividad,
-        'form':ActividadForm(),
+        'activity':activity,
+        'form':ActivityForm(),
         'paginator':paginator
     }
 
     # Agregar nueva actividad
     if request.method == 'POST':
-        formulario = ActividadForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
+        form = ActivityForm(data=request.POST)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se agrego correctamente")
-            return redirect(to="actividades")
+            return redirect(to="activity")
         else:
-            data["form"] = formulario
+            data["form"] = form
 
-    return render(request, "actividades/actividades.html", data)
+    return render(request, "activity/activity.html", data)
 
 @login_required
-def modificar_actividad(request, id):
-    actividad = get_object_or_404(Actividad, codigo_qr=id)
+def edit_activity(request, id):
+    activity = get_object_or_404(Actividad, codigo_qr=id)
 
     data = {
-        'form':ActividadForm(instance=actividad)
+        'form':ActivityForm(instance=activity)
     }
 
     if request.method == 'POST':
-        formulario = ActividadForm(data=request.POST, instance=actividad)
-        if formulario.is_valid():
-            formulario.save()
+        form = ActivityForm(data=request.POST, instance=activity)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se modifico correctamente")
-            return redirect(to="actividades")
-        data["form"] = formulario
+            return redirect(to="activity")
+        data["form"] = form
 
-    return render(request, "actividades/modificar-actividad.html", data)
+    return render(request, "activity/edit-activity.html", data)
 
 @login_required
-def eliminar_actividad(request, id):
-    actividad = get_object_or_404(Actividad, codigo_qr=id)
-    actividad.delete()
+def delete_activity(request, id):
+    activity = get_object_or_404(Actividad, codigo_qr=id)
+    activity.delete()
 
     BASE_DIR = Path(__file__).resolve().parent.parent
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'carnetApp/static/media')
     os.remove(os.path.join(MEDIA_ROOT+'/qr_codes/'+id+'.png'))
 
     messages.success(request, "Se eliminó correctamente")
-    return redirect(to="actividades")
+    return redirect(to="activity")
 
-# Asistencia de las actividades
+# Activity Attend
 @login_required
-def actividad_asistencias(request, id):
-    asistencia = Asistencia.objects.filter(actividad=id)
-
+def activity_attend(request, id):
+    attend = Asistencia.objects.filter(actividad=id)
     queryset = request.GET.get("buscar")
     if queryset:
-        asistencia = Asistencia.objects.filter(
+        attend = Asistencia.objects.filter(
             Q(alumno__no_control__icontains=queryset, actividad=id)
         ).distinct()
 
     page = request.GET.get('page', 1)
     try:
-        paginator = Paginator(asistencia, 15)
-        asistencia = paginator.page(page)
+        paginator = Paginator(attend, 15)
+        attend = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'asistencia':asistencia,
+        'attend':attend,
         'paginator':paginator
     }
 
-    return render(request, "actividad-asistencias/actividad-asistencias.html", data)
+    return render(request, "activity-attend/activity-attend.html", data)
 
-
-# Asistencia de alumnos
+# Exhibitor
 @login_required
-def alumno_asistencias(request, id):
-    asistencia = Asistencia.objects.filter(alumno=id)
-    sumhrs = Asistencia.objects.filter(alumno=id).aggregate(Sum('actividad__horas'))
-
+def exhibitor(request):
     queryset = request.GET.get("buscar")
+    exhibitor = Conferencista.objects.all()
     if queryset:
-        asistencia = Asistencia.objects.filter(
-            Q(actividad__nombre__icontains=queryset, alumno=id)
-        ).distinct()
-
-    page = request.GET.get('page', 1)
-    try:
-        paginator = Paginator(asistencia, 15)
-        asistencia = paginator.page(page)
-    except:
-        raise Http404
-
-    data = {
-        'asistencia': asistencia,
-        'sumhrs':sumhrs,
-        'paginator':paginator
-    }
-
-    return render(request, "actividad-asistencias/alumno-asistencias.html", data)
-
-# Conferencistas
-@login_required
-def conferencistas(request):
-    queryset = request.GET.get("buscar")
-    conferencista = Conferencista.objects.all()
-    if queryset:
-        conferencista = Conferencista.objects.filter(
+        exhibitor = Conferencista.objects.filter(
             Q(nombre__icontains=queryset) |
             Q(apellidos__icontains=queryset) |
             Q(correo__icontains=queryset)
         ).distinct()
 
     page = request.GET.get('page', 1)
-
     try:
-        paginator = Paginator(conferencista, 15)
-        conferencista = paginator.page(page)
+        paginator = Paginator(exhibitor, 15)
+        exhibitor = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'conferencista': conferencista,
-        'form': ConferencistaForm(),
+        'exhibitor': exhibitor,
+        'form': ExhibitorForm(),
         'paginator': paginator
     }
 
     if request.method == 'POST':
-        formulario = ConferencistaForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
+        form = ExhibitorForm(data=request.POST)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se agrego correctamente")
-            return redirect(to="conferencistas")
+            return redirect(to="exhibitor")
         else:
-            data["form"] = formulario
+            data["form"] = form
 
-    return render(request, "conferencistas/conferencistas.html", data)
+    return render(request, "exhibitor/exhibitor.html", data)
 
 @login_required
-def modificar_conferencista(request, id):
-    conferencista = get_object_or_404(Conferencista, id=id)
+def edit_exhibitor(request, id):
+    exhibitor = get_object_or_404(Conferencista, id=id)
 
     data = {
-        'form':ConferencistaForm(instance=conferencista)
+        'form':ExhibitorForm(instance=exhibitor)
     }
 
     if request.method == 'POST':
-        formulario = ConferencistaForm(data=request.POST, instance=conferencista)
-        if formulario.is_valid():
-            formulario.save()
+        form = ExhibitorForm(data=request.POST, instance=exhibitor)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se modifico correctamente")
-            return redirect(to="conferencistas")
-        data["form"] = formulario
+            return redirect(to="exhibitor")
+        data["form"] = form
 
-    return render(request, "conferencistas/modificar-conferencista.html", data)
+    return render(request, "exhibitor/edit-exhibitor.html", data)
 
 @login_required
-def eliminar_conferencista(request, id):
-    conferencista = get_object_or_404(Conferencista, id=id)
-    conferencista.delete()
+def delete_exhibitor(request, id):
+    exhibitor = get_object_or_404(Conferencista, id=id)
+    exhibitor.delete()
     messages.success(request, "Se eliminó correctamente")
-    return redirect(to="conferencistas")
+    return redirect(to="exhibitor")
 
-# Alumnos
+# Students
 @login_required
-def alumnos(request):
+def student(request):
     queryset = request.GET.get("buscar")
-    alumno = Alumno.objects.all()
+    student = Alumno.objects.all()
     if queryset:
-        alumno = Alumno.objects.filter(
+        student = Alumno.objects.filter(
             Q(no_control__icontains=queryset)
         ).distinct()
 
     page = request.GET.get('page', 1)
 
     try:
-        paginator = Paginator(alumno, 15)
-        alumno = paginator.page(page)
+        paginator = Paginator(student, 15)
+        student = paginator.page(page)
     except:
         raise Http404
 
     data = {
-        'alumno': alumno,
-        'form': AlumnoForm(),
+        'student': student,
+        'form': StudentForm(),
         'paginator': paginator
     }
 
     if request.method == 'POST':
-        formulario = AlumnoForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
+        form = StudentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se agrego correctamente")
-            return redirect(to="alumnos")
+            return redirect(to="student")
         else:
-            data["form"] = formulario
+            data["form"] = form
 
-    return render(request, "alumnos/alumnos.html", data)
+    return render(request, "student/student.html", data)
 
 @login_required
-def modificar_alumno(request, id):
-    alumno = get_object_or_404(Alumno, no_control=id)
+def edit_student(request, id):
+    student = get_object_or_404(Alumno, no_control=id)
 
     data = {
-        'form':AlumnoForm(instance=alumno)
+        'form':StudentForm(instance=student)
     }
 
     if request.method == 'POST':
-        formulario = AlumnoForm(data=request.POST, instance=alumno)
-        if formulario.is_valid():
-            formulario.save()
+        form = StudentForm(data=request.POST, instance=student)
+        if form.is_valid():
+            form.save()
             messages.success(request, "Se modifico correctamente")
-            return redirect(to="alumnos")
-        data["form"] = formulario
+            return redirect(to="student")
+        data["form"] = form
 
-    return render(request, "alumnos/modificar-alumno.html", data)
+    return render(request, "student/edit-student.html", data)
 
 @login_required
-def eliminar_alumno(request, id):
-    alumno = get_object_or_404(Alumno, no_control=id)
-    alumno.delete()
+def delete_student(request, id):
+    student = get_object_or_404(Alumno, no_control=id)
+    student.delete()
     messages.success(request, "Se eliminó correctamente")
-    return redirect(to="alumnos")
+    return redirect(to="student")
+
+# Student Attend
+@login_required
+def student_attend(request, id):
+    attend = Asistencia.objects.filter(alumno=id)
+    sum_hours = Asistencia.objects.filter(alumno=id).aggregate(Sum('actividad__horas'))
+
+    queryset = request.GET.get("buscar")
+    if queryset:
+        attend = Asistencia.objects.filter(
+            Q(actividad__nombre__icontains=queryset, alumno=id)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(attend, 15)
+        attend = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'attend': attend,
+        'sum_hours':sum_hours,
+        'paginator':paginator
+    }
+
+    return render(request, "activity-attend/student-attend.html", data)
+

@@ -1,14 +1,14 @@
 {% extends "base.html" %} 
-{% block title %} Actividades | Carnet TecNM {% endblock %} 
+{% block title %} Conferencistas | Carnet TecNM {% endblock %}
 
 {% block content %} 
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
 {% block js %}
 <script type="text/javascript">
-    function eliminarActividad(id) {
+    function deleteExhibitor(id) {
         console.log(id);
         Swal.fire({
-                "title": "¿Seguro(a) que desea de eliminar esta actividad?",
+                "title": "¿Seguro(a) que desea de eliminar este(a) conferencista?",
                 "text": false,
                 "icon": "question",
                 "showCancelButton": true,
@@ -19,23 +19,9 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {
-                    window.location.href = "/eliminar-actividad/" + id + "/"
+                    window.location.href = "/delete-exhibitor/" + id + "/"
                 }
             })
-    }
-
-    function mostrarQR(id, nombre, docente){
-        console.log(id);
-        Swal.fire({
-          title: nombre,
-          text: docente,
-          imageUrl: id,
-          imageWidth: 380,
-          imageHeight: 380,
-          imageAlt: nombre,
-          confirmButtonText: "Cerrar",
-          confirmButtonColor: "#757575"
-        })
     }
 </script>
 {% endblock %}
@@ -46,12 +32,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-lg-2">
-                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#agregarModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
+                        <a href="#" class="btn btn-primary mb-3" style="background: #052947; border-color: #0f4471" data-toggle="modal" data-target="#addModal">Agregar nuevo <i class="fas fa-plus ml-1"></i></a>
                     </div>
                     <div class="col-12 col-lg-10">
                         <form action="" method="get" class="mb-3">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Buscar actividad" name="buscar" value="{{ request.GET.buscar }}">
+                                <input type="text" class="form-control" placeholder="Buscar conferencista" name="buscar" value="{{ request.GET.buscar }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" style="background: #052947; border-color: #0f4471" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
@@ -64,36 +50,32 @@
                         <div class="table-responsive-xl">
                             <table class="table table-sm table-hover table-condensed table-bordered table-striped">
                                 <tr style="background-color: #052947; color: #ffffff;">
-                                    <td class="text-center align-middle">Nombre</td>
-                                    <td class="text-center align-middle">Horas</td>
-                                    <td class="text-center align-middle">Fecha</td>
-                                    <td class="text-center align-middle">Conferencista (Correo)</td>
-                                    <td class="text-center align-middle" style="width: 130px; min-width: 130px;">Codigo QR</td>
-                                    <td class="text-center align-middle" style="width: 160px; min-width: 160px;">Asistencia</td>
+                                    <td class="text-center align-middle">Nombre(s)</td>
+                                    <td class="text-center align-middle">Apellidos</td>
+                                    <td class="text-center align-middle">Correo</td>
+                                    <td class="text-center align-middle">Departamento</td>
                                     <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
                                 </tr>
 
-                                {% for a in actividad %}
+                                {% for e in exhibitor %}
                                 <tr>
-                                    <td class="align-middle">{{ a.nombre }}</td>
-                                    <td class="align-middle">{{ a.horas }}</td>
-                                    <td class="align-middle">{{ a.fecha }}</td>
-                                    <td class="align-middle">{{ a.impartidor }}</td>
-                                    <td class="text-center align-middle"><a href="#" onclick="mostrarQR('/static/media/qr_codes/{{a.codigo_qr}}.png', '{{ a.nombre }}', '{{ a.impartidor }}')" class="btn btn-info btn-sm">Mostrar QR <i class="fas fa-qrcode"></i></a></td>
-                                    <td class="text-center align-middle"><a href="{% url 'actividad-asistencias' a.codigo_qr %}" class="btn btn-success btn-sm">Mostrar Asistencia</a></td>
+                                    <td class="align-middle">{{ e.nombre }}</td>
+                                    <td class="align-middle">{{ e.apellidos }}</td>
+                                    <td class="align-middle">{{ e.correo }}</td>
+                                    <td class="align-middle">{{ e.departamento }}</td>
                                     <td class="text-center align-middle">
-                                        <a href="{% url 'modificar-actividad' a.codigo_qr %}" class="btn btn-warning btn-sm">Modificar</a>
-                                        <a href="#" onclick="eliminarActividad('{{ a.codigo_qr }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
+                                        <a href="{% url 'edit-exhibitor' e.id %}" class="btn btn-warning btn-sm">Modificar</a>
+                                        <a href="#" onclick="deleteExhibitor('{{ e.id }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
                                     <tr>
-                                        <td class="text-center align-middle" colspan="7">Sin registros</td>
+                                        <td class="text-center align-middle" colspan="5">Sin registros</td>
                                     </tr>
                                 {% endfor %}
                             </table>
                         </div>
-                        {% include "actividades/paginator.html" %}
+                        {% include "exhibitor/paginator.html" %}
                     </div>
                 </div>
             </div>
@@ -101,11 +83,11 @@
     </div>
 </div>
 
-<div class="modal fade bd-example-modal-lg" id="agregarModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Nueva actividad</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar nuevo(a) conferencista</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -113,7 +95,6 @@
             <div class="modal-body">
                 <form action="" method="POST">
                     {% csrf_token %} {{ form | crispy }}
-                    <a href="{% url 'conferencistas' %}">Agregar nuevo(a) conferencista</a>
                     <div class="d-flex justify-content-end mt-3">
                         <button type="button" class="btn btn btn-outline-dark mr-1" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary ml-1" style="background: #052947; border-color: #0f4471">Guardar Cambios</button>
