@@ -119,7 +119,7 @@ class Actividad(models.Model):
     img = models.ImageField(upload_to='qr_codes', blank=True)
 
     def __str__(self):
-        return str(self.codigo_qr)
+        return '%s|%s' % (self.nombre, self.horas)
 
     def save(self, *args, **kwargs):
         qrcode_img = qrcode.make(self.codigo_qr)
