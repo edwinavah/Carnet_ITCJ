@@ -47,7 +47,12 @@ INSTALLED_APPS = [
     'carnetApp',
     'crispy_forms',
     'rest_framework',
+    'django_filters',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

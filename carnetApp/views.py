@@ -10,6 +10,7 @@ import os
 from .models import Actividad, Asistencia, Alumno, Conferencista
 from .forms import ActivityForm, ExhibitorForm, StudentForm
 from .serializers import ActivitySerializer, AttendSerializer, StudentSerializer, ExhibitorSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ActivityViewset(viewsets.ModelViewSet):
     queryset = Actividad.objects.all()
@@ -26,6 +27,8 @@ class StudentViewset(viewsets.ModelViewSet):
 class AttendViewset(viewsets.ModelViewSet):
     queryset = Asistencia.objects.all()
     serializer_class = AttendSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['alumno']
 
 @login_required
 def dashboard(request):
