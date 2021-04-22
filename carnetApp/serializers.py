@@ -12,13 +12,12 @@ class ExhibitorSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ActivitySerializer(serializers.ModelSerializer):
-    impartidor = serializers.StringRelatedField()
     class Meta:
         model = Actividad
         fields = "__all__"
 
 class AttendSerializer(serializers.ModelSerializer):
-    actividad = serializers.StringRelatedField()
     class Meta:
         model = Asistencia
         fields = "__all__"
+
