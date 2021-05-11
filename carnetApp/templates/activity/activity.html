@@ -82,7 +82,7 @@
                                     <td class="text-center align-middle"><a href="#" onclick="showQR('/static/media/qr_codes/{{a.codigo_qr}}.png', '{{ a.nombre }}', '{{ a.impartidor }}')" class="btn btn-info btn-sm">Mostrar QR <i class="fas fa-qrcode"></i></a></td>
                                     <td class="text-center align-middle"><a href="{% url 'activity-attend' a.codigo_qr %}" class="btn btn-success btn-sm">Mostrar Asistencia</a></td>
                                     <td class="text-center align-middle">
-                                        <a href="{% url 'edit-activity' a.codigo_qr %}" class="btn btn-warning btn-sm">Modificar</a>
+                                        <a href="{% url 'edit-activity' a.codigo_qr %}" class="btn btn-warning btn-sm">Editar</a>
                                         <a href="#" onclick="deleteActivity('{{ a.codigo_qr }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
                                     </td>
                                 </tr>

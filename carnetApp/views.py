@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Sum
 from pathlib import Path
 import os
-from .models import Actividad, Asistencia, Alumno, Conferencista
-from .forms import ActivityForm, ExhibitorForm, StudentForm
+from .models import Usuario, Actividad, Asistencia, Alumno, Conferencista, Carrera, Departamento
+from .forms import UserForm, ActivityForm, ExhibitorForm, StudentForm, CareerForm, DepartmentForm
 from .serializers import ActivitySerializer, AttendSerializer, StudentSerializer, ExhibitorSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -31,8 +31,138 @@ class AttendViewset(viewsets.ModelViewSet):
     filterset_fields = ['alumno']
 
 @login_required
+def administrators(request):
+    administrators = Usuario.objects.all()
+
+    data = {
+        'administrators': administrators,
+    }
+
+    return render(request, "registration/administrators.html", data)
+
+@login_required
 def dashboard(request):
     return render(request, "dashboard.html")
+
+#Carrera
+@login_required
+def career(request):
+    queryset = request.GET.get("buscar")
+    career = Carrera.objects.all()
+    if queryset:
+        career = Carrera.objects.filter(
+            Q(nombre__icontains=queryset)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(career, 15)
+        career = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'career': career,
+        'form': CareerForm(),
+        'paginator': paginator
+    }
+
+    # Agregar nueva actividad
+    if request.method == 'POST':
+        form = CareerForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se agrego correctamente")
+            return redirect(to="career")
+        else:
+            data["form"] = form
+
+    return render(request, "career/career.html", data)
+
+@login_required
+def edit_career(request, id):
+    career = get_object_or_404(Carrera, id=id)
+
+    data = {
+        'form': CareerForm(instance=career)
+    }
+
+    if request.method == 'POST':
+        form = CareerForm(data=request.POST, instance=career)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se modifico correctamente")
+            return redirect(to="career")
+        data["form"] = form
+
+    return render(request, "career/edit-career.html", data)
+
+@login_required
+def delete_career(request, id):
+    career = get_object_or_404(Carrera, id=id)
+    career.delete()
+    messages.success(request, "Se eliminó correctamente")
+    return redirect(to="career")
+
+#Departamentos del Instituto
+@login_required
+def department(request):
+    queryset = request.GET.get("buscar")
+    department = Departamento.objects.all()
+    if queryset:
+        department = Departamento.objects.filter(
+            Q(nombre__icontains=queryset)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(department, 15)
+        department = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'department': department,
+        'form': CareerForm(),
+        'paginator': paginator
+    }
+
+    # Agregar nueva actividad
+    if request.method == 'POST':
+        form = DepartmentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se agrego correctamente")
+            return redirect(to="department")
+        else:
+            data["form"] = form
+
+    return render(request, "department/department.html", data)
+
+@login_required
+def edit_department(request, id):
+    department = get_object_or_404(Departamento, id=id)
+
+    data = {
+        'form': DepartmentForm(instance=department)
+    }
+
+    if request.method == 'POST':
+        form = DepartmentForm(data=request.POST, instance=department)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se modifico correctamente")
+            return redirect(to="department")
+        data["form"] = form
+
+    return render(request, "department/edit-department.html", data)
+
+@login_required
+def delete_department(request, id):
+    department = get_object_or_404(Departamento, id=id)
+    department.delete()
+    messages.success(request, "Se eliminó correctamente")
+    return redirect(to="department")
 
 # Actividades
 @login_required

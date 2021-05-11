@@ -24,7 +24,11 @@
                 <div class="barra-lateral col-12 col-md-auto">
                     <div class="logo text-center">
                         {% if user.is_authenticated %}
-                        <img src="{% static 'images/edwinavahh.jpg' %}" alt="" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        {% if user.img == "" %}
+                            <img src="../static/images/default-user.png" alt="Sin foto de perfil" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        {% elif user.img != "" %}
+                            <img src="../static/media/{{ user.img }}" alt="{{ user.img }}" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        {% endif %}
                         <div class="row">
                             <div class="col text-center mt-2">
                                     Hola, {{ user.first_name }}

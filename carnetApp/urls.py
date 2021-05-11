@@ -5,7 +5,10 @@ from rest_framework import routers
 from .views import dashboard, ActivityViewset, activity, edit_activity, delete_activity, \
     ExhibitorViewset, exhibitor, edit_exhibitor, delete_exhibitor, \
     StudentViewset, student, edit_student, delete_student, \
-    AttendViewset, activity_attend, student_attend
+    AttendViewset, activity_attend, student_attend, \
+    career, edit_career, delete_career, \
+    department, edit_department, delete_department, \
+    administrators
 
 router = routers.DefaultRouter()
 router.register('activity', ActivityViewset)
@@ -15,6 +18,12 @@ router.register('attend', AttendViewset)
 
 urlpatterns = [
     path('', dashboard, name="dashboard"),
+    path('career/', career, name="career"),
+    path('edit-career/<id>/', edit_career, name="edit-career"),
+    path('delete-career/<id>/', delete_career, name="delete-career"),
+    path('department/', department, name="department"),
+    path('edit-department/<id>/', edit_department, name="edit-department"),
+    path('delete-department/<id>/', delete_department, name="delete-department"),
     path('activity/', activity, name="activity"),
     path('edit-activity/<id>/', edit_activity, name="edit-activity"),
     path('delete-activity/<id>/', delete_activity, name="delete-activity"),
@@ -26,6 +35,7 @@ urlpatterns = [
     path('edit-student/<id>/', edit_student, name="edit-student"),
     path('delete-student/<id>/', delete_student, name="delete-student"),
     path('student-attend/<id>/', student_attend, name="student-attend"),
+    path('administrators/', administrators, name="administrators"),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

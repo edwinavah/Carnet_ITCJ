@@ -1,4 +1,4 @@
-from .models import Actividad, Asistencia, Alumno, Conferencista
+from .models import Actividad, Asistencia, Alumno, Conferencista, Carrera, Departamento
 from rest_framework import serializers
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -21,3 +21,12 @@ class AttendSerializer(serializers.ModelSerializer):
         model = Asistencia
         fields = "__all__"
 
+class CareerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Carrera
+        fields = "__all__"
+
+class DepartamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Departamento
+        fields = "__all__"

@@ -1,7 +1,7 @@
-{% extends "base.html" %} 
-{% block title %} Conferencistas | Carnet TecNM {% endblock %}
+{% extends "base.html" %}
+{% block title %} Administradores | Carnet TecNM {% endblock %}
 
-{% block content %} 
+{% block content %}
 {% load crispy_forms_tags %}
 {% block js %}
 <script type="text/javascript">
@@ -48,24 +48,43 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive-xl">
-                            <table class="table table-sm table-hover table-condensed table-bordered table-striped">
+                            <table class="table table-sm table-hover table-condensed">
                                 <tr style="background-color: #052947; color: #ffffff;">
-                                    <td class="text-center align-middle">Nombre(s)</td>
-                                    <td class="text-center align-middle">Apellidos</td>
-                                    <td class="text-center align-middle">Correo</td>
-                                    <td class="text-center align-middle">Departamento</td>
-                                    <td class="text-center align-middle" style="width: 180px; min-width: 180px;">Acciones</td>
+                                    <td class="align-middle pl-3" style="width: 100px; min-width: 100px;">Foto</td>
+                                    <td class="align-middle">Usuario</td>
+                                    <td class="align-middle">Nombre(s)</td>
+                                    <td class="align-middle">Apellido</td>
+                                    <td class="align-middle">Correo electronico</td>
+                                    <td class="text-center align-middle" style="width: 80px; min-width: 80px">Activo</td>
+                                    <td class="text-center align-middle" style="width: 80px; min-width: 80px">Staff</td>
+                                    <td class="text-center align-middle" style="width: 135px; min-width: 135px;">Acciones</td>
                                 </tr>
 
-                                {% for e in exhibitor %}
+                                {% for a in administrators %}
                                 <tr>
-                                    <td class="align-middle">{{ e.nombre }}</td>
-                                    <td class="align-middle">{{ e.apellidos }}</td>
-                                    <td class="align-middle">{{ e.correo }}</td>
-                                    <td class="align-middle">{{ e.departamento }}</td>
-                                    <td class="text-center align-middle">
-                                        <a href="{% url 'edit-exhibitor' e.id %}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="#" onclick="deleteExhibitor('{{ e.id }}')" class="btn btn-danger btn-sm ml-1">Eliminar</a>
+                                    {% if a.img == "" %}
+                                        <td class="align-middle pl-3"><img src="../../static/images/default-user.png" alt="Sin foto de perfil" style="width: auto; height: 50px; border-radius: 50%;"></td>
+                                    {% elif a.img != "" %}
+                                        <td class="align-middle pl-3"><img src="../../static/media/{{ a.img }}" alt="{{ a.img }}" style="width: auto; height: 50px; border-radius: 50%;"></td>
+                                    {% endif %}
+                                    <td class="align-middle">{{ a.username }}</td>
+                                    <td class="align-middle">{{ a.first_name }}</td>
+                                    <td class="align-middle">{{ a.last_name }}</td>
+                                    <td class="align-middle">{{ a.email }}</td>
+                                    {% if a.user_active is True %}
+                                        <td class="text-center align-middle"><span class="badge badge-pill badge-success"><i class="far fa-check-circle"></i></span></td>
+                                    {% elif a.user_active is False %}
+                                        <td class="text-center align-middle"><span class="badge badge-pill badge-danger"><i class="far fa-times-circle"></i></span></td>
+                                    {% endif %}
+                                    {% if a.user_admin is True %}
+                                        <td class="text-center align-middle"><span class="badge badge-pill badge-success"><i class="far fa-check-circle"></i></span></td>
+                                    {% elif a.user_admin is False %}
+                                        <td class="text-center align-middle"><span class="badge badge-pill badge-danger"><i class="far fa-times-circle"></i></span></td>
+                                    {% endif %}
+                                    <td class="align-middle">
+                                        <a href="#" class="btn btn-warning btn-sm">Editar</a>
+{#                                        <a href="{% url 'edit-exhibitor' e.id %}" class="btn btn-warning btn-sm">Modificar</a>#}
+                                        <a href="#" onclick="deleteExhibitor('{{ e.id }}')" class="btn btn-danger btn-sm">Eliminar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
@@ -95,7 +114,6 @@
             <div class="modal-body">
                 <form action="" method="POST">
                     {% csrf_token %} {{ form | crispy }}
-                    <a href="{% url 'department' %}">Agregar nuevo departamento</a>
                     <div class="d-flex justify-content-end mt-3">
                         <button type="button" class="btn btn btn-outline-dark mr-1" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary ml-1" style="background: #052947; border-color: #0f4471">Guardar Cambios</button>
