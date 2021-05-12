@@ -2,27 +2,23 @@ from django import forms
 from .models import Usuario, Actividad, Conferencista, Alumno, Carrera, Departamento
 
 class UserForm(forms.ModelForm):
-    # password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput(
-    #     attrs={
-    #         'class': 'form-control',
-    #         'placeholder': 'Ingrese la contraseña',
-    #         'id': 'password1',
-    #         'required': 'required',
-    #     }
-    # ))
-    #
-    # password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput(
-    #     attrs={
-    #         'class': 'form-control',
-    #         'placeholder': 'Ingrese nuevamente la contraseña',
-    #         'id': 'password2',
-    #         'required': 'required',
-    #     }
-    # ))
-
     class Meta:
         model = Usuario
-        fields = ["username", "first_name", "last_name", "user_active", "user_admin", "password", "img"]
+        fields = ["username", "first_name", "last_name", "user_active", "user_admin", "email", "password", "img"]
+        widgets = {
+            'password':forms.PasswordInput(
+                attrs = {
+                    'value': 'Tecno#2K#Admin',
+                    'type': 'hidden',
+                }
+            )
+        }
+    def save(self, commit = True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user
 
 class CareerForm(forms.ModelForm):
     class Meta:

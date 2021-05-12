@@ -32,13 +32,13 @@ class UsuarioManager(BaseUserManager):
         return user
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=255, unique=True, verbose_name="Usuario")
-    email = models.EmailField(max_length=255, unique=True, verbose_name="Correo electronico")
+    username = models.CharField(max_length=255, unique=True, verbose_name="Nombre de usuario")
+    email = models.EmailField(max_length=255, unique=True, verbose_name="Correo")
     first_name = models.CharField(max_length=255, blank=False, null=False, verbose_name="Nombre(s)")
     last_name = models.CharField(max_length=255, blank=False, null=False, verbose_name="Apellidos")
     img = models.ImageField(upload_to="usuarios/", blank=True, null=True, verbose_name="Foto de perfil")
-    user_active = models.BooleanField(default=True)
-    user_admin = models.BooleanField(default=False)
+    user_active = models.BooleanField(default=True, verbose_name="Usuario activo")
+    user_admin = models.BooleanField(default=False, verbose_name="Usuario administrador")
 
     objects = UsuarioManager()
     USERNAME_FIELD = 'email'

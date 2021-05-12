@@ -8,7 +8,7 @@ from .views import dashboard, ActivityViewset, activity, edit_activity, delete_a
     AttendViewset, activity_attend, student_attend, \
     career, edit_career, delete_career, \
     department, edit_department, delete_department, \
-    administrators
+    administrators, edit_administrators, delete_administrators
 
 router = routers.DefaultRouter()
 router.register('activity', ActivityViewset)
@@ -36,6 +36,8 @@ urlpatterns = [
     path('delete-student/<id>/', delete_student, name="delete-student"),
     path('student-attend/<id>/', student_attend, name="student-attend"),
     path('administrators/', administrators, name="administrators"),
+    path('edit-administrators/<id>/', edit_administrators, name="edit-administrators"),
+    path('delete-administrators/<id>/', delete_administrators, name="delete-administrators"),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

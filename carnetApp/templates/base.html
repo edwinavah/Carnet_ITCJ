@@ -25,9 +25,9 @@
                     <div class="logo text-center">
                         {% if user.is_authenticated %}
                         {% if user.img == "" %}
-                            <img src="../static/images/default-user.png" alt="Sin foto de perfil" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                            <img src="{% static 'images/default-user.png' %}" alt="Sin foto de perfil" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
                         {% elif user.img != "" %}
-                            <img src="../static/media/{{ user.img }}" alt="{{ user.img }}" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                            <img src="{% static 'media/' %}{{ user.img }}" alt="{{ user.img }}" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
                         {% endif %}
                         <div class="row">
                             <div class="col text-center mt-2">

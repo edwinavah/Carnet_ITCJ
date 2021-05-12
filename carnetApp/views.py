@@ -32,13 +32,62 @@ class AttendViewset(viewsets.ModelViewSet):
 
 @login_required
 def administrators(request):
+    queryset = request.GET.get("buscar")
     administrators = Usuario.objects.all()
+    if queryset:
+        administrators = Usuario.objects.filter(
+            Q(username__icontains=queryset)
+        ).distinct()
+
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(administrators, 15)
+        administrators = paginator.page(page)
+    except:
+        raise Http404
 
     data = {
         'administrators': administrators,
+        'form': UserForm(),
+        'paginator': paginator
     }
 
+    # Agregar nueva actividad
+    if request.method == 'POST':
+        form = UserForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se agrego correctamente")
+            return redirect(to="administrators")
+        else:
+            data["form"] = form
+
     return render(request, "registration/administrators.html", data)
+
+@login_required
+def edit_administrators(request, id):
+    administrators = get_object_or_404(Usuario, id=id)
+
+    data = {
+        'form': UserForm(instance=administrators)
+    }
+
+    if request.method == 'POST':
+        form = UserForm(data=request.POST, instance=administrators, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Se modifico correctamente")
+            return redirect(to="administrators")
+        data["form"] = form
+
+    return render(request, "registration/edit-administrators.html", data)
+
+@login_required
+def delete_administrators(request, id):
+    administrators = get_object_or_404(Usuario, id=id)
+    administrators.delete()
+    messages.success(request, "Se eliminó correctamente")
+    return redirect(to="administrators")
 
 @login_required
 def dashboard(request):

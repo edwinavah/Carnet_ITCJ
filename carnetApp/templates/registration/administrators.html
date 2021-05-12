@@ -5,10 +5,10 @@
 {% load crispy_forms_tags %}
 {% block js %}
 <script type="text/javascript">
-    function deleteExhibitor(id) {
+    function deleteAdministrators(id) {
         console.log(id);
         Swal.fire({
-                "title": "¿Seguro(a) que desea de eliminar este(a) conferencista?",
+                "title": "¿Seguro(a) que desea eliminar este(a) administrador(a)?",
                 "text": false,
                 "icon": "question",
                 "showCancelButton": true,
@@ -19,13 +19,13 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {
-                    window.location.href = "/delete-exhibitor/" + id + "/"
+                    window.location.href = "/delete-administrators/" + id + "/"
                 }
             })
     }
 </script>
 {% endblock %}
-
+{% load static %}
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
@@ -37,7 +37,7 @@
                     <div class="col-12 col-lg-10">
                         <form action="" method="get" class="mb-3">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Buscar conferencista" name="buscar" value="{{ request.GET.buscar }}">
+                                <input type="text" class="form-control" placeholder="Buscar usuario" name="buscar" value="{{ request.GET.buscar }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" style="background: #052947; border-color: #0f4471" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
@@ -50,11 +50,11 @@
                         <div class="table-responsive-xl">
                             <table class="table table-sm table-hover table-condensed">
                                 <tr style="background-color: #052947; color: #ffffff;">
-                                    <td class="align-middle pl-3" style="width: 100px; min-width: 100px;">Foto</td>
+                                    <td class="align-middle pl-3" style="width: 100px; min-width: 100px;">Perfil</td>
                                     <td class="align-middle">Usuario</td>
                                     <td class="align-middle">Nombre(s)</td>
-                                    <td class="align-middle">Apellido</td>
-                                    <td class="align-middle">Correo electronico</td>
+                                    <td class="align-middle">Apellidos</td>
+                                    <td class="align-middle">Correo</td>
                                     <td class="text-center align-middle" style="width: 80px; min-width: 80px">Activo</td>
                                     <td class="text-center align-middle" style="width: 80px; min-width: 80px">Staff</td>
                                     <td class="text-center align-middle" style="width: 135px; min-width: 135px;">Acciones</td>
@@ -63,9 +63,9 @@
                                 {% for a in administrators %}
                                 <tr>
                                     {% if a.img == "" %}
-                                        <td class="align-middle pl-3"><img src="../../static/images/default-user.png" alt="Sin foto de perfil" style="width: auto; height: 50px; border-radius: 50%;"></td>
+                                        <td class="align-middle pl-3"><img src="{% static 'images/default-user.png' %}" alt="Sin foto de perfil" style="width: auto; height: 50px; border-radius: 50%;"></td>
                                     {% elif a.img != "" %}
-                                        <td class="align-middle pl-3"><img src="../../static/media/{{ a.img }}" alt="{{ a.img }}" style="width: auto; height: 50px; border-radius: 50%;"></td>
+                                        <td class="align-middle pl-3"><img src="{% static 'media/' %}{{ a.img }}" alt="{{ a.img }}" style="width: auto; height: 50px; border-radius: 50%;"></td>
                                     {% endif %}
                                     <td class="align-middle">{{ a.username }}</td>
                                     <td class="align-middle">{{ a.first_name }}</td>
@@ -82,9 +82,8 @@
                                         <td class="text-center align-middle"><span class="badge badge-pill badge-danger"><i class="far fa-times-circle"></i></span></td>
                                     {% endif %}
                                     <td class="align-middle">
-                                        <a href="#" class="btn btn-warning btn-sm">Editar</a>
-{#                                        <a href="{% url 'edit-exhibitor' e.id %}" class="btn btn-warning btn-sm">Modificar</a>#}
-                                        <a href="#" onclick="deleteExhibitor('{{ e.id }}')" class="btn btn-danger btn-sm">Eliminar</a>
+                                        <a href="{% url 'edit-administrators' a.id %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="#" onclick="deleteAdministrators('{{ a.id }}')" class="btn btn-danger btn-sm">Eliminar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
@@ -112,7 +111,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %} {{ form | crispy }}
                     <div class="d-flex justify-content-end mt-3">
                         <button type="button" class="btn btn btn-outline-dark mr-1" data-dismiss="modal">Cerrar</button>
