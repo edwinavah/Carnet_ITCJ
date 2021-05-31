@@ -142,3 +142,5 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/carnetApp/static/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'carnetApp/static/media')
 AUTH_USER_MODEL = 'carnetApp.Usuario'
+
+STATIC_ROOT = 'C:/Users/edwin/Desktop/'
