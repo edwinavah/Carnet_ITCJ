@@ -99,7 +99,16 @@ def delete_administrators(request, id):
 
 @login_required
 def dashboard(request):
-    return render(request, "dashboard.html")
+    administrators = Usuario.objects.all().order_by('-id')[:3]
+    career = Carrera.objects.all().order_by('-id')[:3]
+    department = Departamento.objects.all().order_by('-id')[:3]
+
+    data = {
+        'administrators': administrators,
+        'career': career,
+        'department': department,
+    }
+    return render(request, "dashboard.html", data)
 
 #Carrera
 @login_required

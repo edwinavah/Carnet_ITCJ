@@ -2,46 +2,139 @@
 {% block title %} Dashboard | Carnet TecNM {% endblock %} {% load static %}
 
 {% block content %}
-<div class="row mt-4">
-    <div class="col-12 col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Perfil de usuario</h5>
-                {% if user.is_authenticated %}
-                    <p>{{ user.first_name }} {{ user.last_name }}</p>
-
-
-
-
-                    
+<div class="row">
+    {#  Profile Card  #}
+    <div class="col-12 col-xl-4 mt-4">
+        <div class="card" style="min-height: 310px">
+            <div class="card-body d-flex flex-column justify-content-around">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4>Hola, {{ user.username }}</h4>
+                    {% if user.is_authenticated %}
                     {% if user.img == "" %}
-                        <img src="{% static 'images/default-user.png' %}" alt="Sin foto de perfil" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        <img src="{% static 'images/default-user.png' %}" alt="Sin foto de perfil" style="width: 100px; height: 100px; border: 5px solid #ffffff; border-radius: 50%;">
                     {% elif user.img != "" %}
-                        <img src="{% static 'media/' %}{{ user.img }}" alt="{{ user.img }}" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                        <img src="{% static 'media/' %}{{ user.img }}" alt="{{ user.img }}" style="width: 100px; height: 100px; border: 5px solid #ffffff; border-radius: 50%;">
                     {% endif %}
-                {%  endif %}
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                    {%  endif %}
+                </div>
+                <div>
+                    <p class="text-sm-left font-italic">{{ user.first_name }} {{ user.last_name }}</p>
+                    <p class="text-sm-left font-italic">{{ user.email }}</p>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a href="#" class="btn btn-primary btn-sm" style="background: #052947; border-color: #0f4471">Cambiar mi contraseña</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+    {#  Administrators Card  #}
+    <div class="col-12 col-xl-4 mt-4">
+        <div class="card" style="min-height: 310px">
+            <div class="card-body d-flex flex-column justify-content-around">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4>Administradores</h4>
+                    <img src="{% static 'images/default-administrators.png' %}" alt="Sin foto de perfil" style="width: 100px; height: 100px; border: 5px solid #ffffff;">
+                </div>
+
+                <div>
+                    <div class="table-responsive-xl">
+                        <table class="table table-sm table-hover table-condensed">
+                            <tr style="background-color: #052947; color: #ffffff;">
+                                <td class="align-middle">Correo</td>
+                            </tr>
+
+                            {% for a in administrators %}
+                            <tr>
+                                <td class="align-middle">{{ a.email }}</td>
+                            </tr>
+                            {% empty %}
+                                <tr>
+                                    <td class="text-center align-middle" colspan="5">Sin registros</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'administrators' %}" class="btn btn-primary btn-sm" style="background: #052947; border-color: #0f4471">Ver más</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+    {#  Careers Card  #}
+    <div class="col-12 col-xl-4 mt-4">
+        <div class="card" style="min-height: 310px">
+            <div class="card-body d-flex flex-column justify-content-around">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4>Carreras</h4>
+                    <img src="{% static 'images/default-studient.png' %}" alt="Sin foto de perfil" style="width: 100px; height: 100px; border: 5px solid #ffffff;">
+                </div>
+
+                <div>
+                    <div class="table-responsive-xl">
+                        <table class="table table-sm table-hover table-condensed">
+                            <tr style="background-color: #052947; color: #ffffff;">
+                                <td class="align-middle">Nombre</td>
+                            </tr>
+
+                            {% for c in career %}
+                            <tr>
+                                <td class="align-middle">{{ c.nombre }}</td>
+                            </tr>
+                            {% empty %}
+                                <tr>
+                                    <td class="text-center align-middle" colspan="5">Sin registros</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'career' %}" class="btn btn-primary btn-sm" style="background: #052947; border-color: #0f4471">Ver más</a>
+                </div>
             </div>
         </div>
     </div>
+
+    {#  Departaments Card  #}
+    <div class="col-12 col-xl-4 mt-4">
+        <div class="card" style="min-height: 310px">
+            <div class="card-body d-flex flex-column justify-content-around">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4>Departamentos</h4>
+                    <img src="{% static 'images/default-departament.png' %}" alt="Sin foto de perfil" style="width: 100px; height: 100px; border: 5px solid #ffffff;">
+                </div>
+
+                <div>
+                    <div class="table-responsive-xl">
+                        <table class="table table-sm table-hover table-condensed">
+                            <tr style="background-color: #052947; color: #ffffff;">
+                                <td class="align-middle">Nombre</td>
+                            </tr>
+
+                            {% for d in department %}
+                            <tr>
+                                <td class="align-middle">{{ d.nombre }}</td>
+                            </tr>
+                            {% empty %}
+                                <tr>
+                                    <td class="text-center align-middle" colspan="5">Sin registros</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'department' %}" class="btn btn-primary btn-sm" style="background: #052947; border-color: #0f4471">Ver más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
