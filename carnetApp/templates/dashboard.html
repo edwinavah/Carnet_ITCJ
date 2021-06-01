@@ -1,6 +1,47 @@
 {% extends "base.html" %} 
-{% block title %} Dashboard | Carnet TecNM {% endblock %} 
+{% block title %} Dashboard | Carnet TecNM {% endblock %} {% load static %}
 
 {% block content %}
+<div class="row mt-4">
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Perfil de usuario</h5>
+                {% if user.is_authenticated %}
+                    <p>{{ user.first_name }} {{ user.last_name }}</p>
 
+
+
+
+                    
+                    {% if user.img == "" %}
+                        <img src="{% static 'images/default-user.png' %}" alt="Sin foto de perfil" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                    {% elif user.img != "" %}
+                        <img src="{% static 'media/' %}{{ user.img }}" alt="{{ user.img }}" style="width: 140px; height: 140px; border: 5px solid #ffffff; border-radius: 50%;">
+                    {% endif %}
+                {%  endif %}
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

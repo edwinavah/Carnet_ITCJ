@@ -9,7 +9,7 @@ from pathlib import Path
 import os
 from .models import Usuario, Actividad, Asistencia, Alumno, Conferencista, Carrera, Departamento
 from .forms import UserForm, ActivityForm, ExhibitorForm, StudentForm, CareerForm, DepartmentForm
-from .serializers import ActivitySerializer, AttendSerializer, StudentSerializer, ExhibitorSerializer
+from .serializers import ActivitySerializer, AttendSerializer, StudentSerializer, ExhibitorSerializer,  CareerSerializer, DepartamentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 class ActivityViewset(viewsets.ModelViewSet):
@@ -29,6 +29,14 @@ class AttendViewset(viewsets.ModelViewSet):
     serializer_class = AttendSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['alumno']
+
+class CareerViewset(viewsets.ModelViewSet):
+    queryset = Carrera.objects.all()
+    serializer_class = CareerSerializer
+
+class DepartamentViewset(viewsets.ModelViewSet):
+    queryset = Departamento.objects.all()
+    serializer_class = DepartamentSerializer
 
 @login_required
 def administrators(request):

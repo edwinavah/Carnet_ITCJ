@@ -8,13 +8,16 @@ from .views import dashboard, ActivityViewset, activity, edit_activity, delete_a
     AttendViewset, activity_attend, student_attend, \
     career, edit_career, delete_career, \
     department, edit_department, delete_department, \
-    administrators, edit_administrators, delete_administrators
+    administrators, edit_administrators, delete_administrators, \
+    CareerViewset, DepartamentViewset
 
 router = routers.DefaultRouter()
 router.register('activity', ActivityViewset)
 router.register('exhibitor', ExhibitorViewset)
 router.register('student', StudentViewset)
 router.register('attend', AttendViewset)
+router.register('career', CareerViewset)
+router.register('departament', DepartamentViewset)
 
 urlpatterns = [
     path('', dashboard, name="dashboard"),
